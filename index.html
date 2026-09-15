@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Joshua Hulka - Cloud & Systems Automation Engineer | PowerShell, Go, Microsoft Azure, and Full-Stack IT Solutions">
+  <meta name="author" content="Joshua Hulka">
+  <title>Joshua Hulka | Cloud & Systems Automation Portfolio</title>
+  <style>
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      
+      /* Dark Theme (Default) */
+      --bg-base: #0a0e17;
+      --bg-surface: #111827;
+      --bg-surface-elevated: #1a2234;
+      --bg-surface-glass: rgba(17, 24, 39, 0.88);
+      --border-subtle: #232e48;
+      --border-accent: #3b82f6;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
+      --accent-rose: #f43f5e;
+      
+      --terminal-bg: #0d1117;
+      --terminal-header: #161b22;
+      --terminal-border: #30363d;
+      
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      --glow-blue: 0 0 20px rgba(59, 130, 246, 0.25);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #f1f5f9;
+      --bg-surface-glass: rgba(255, 255, 255, 0.92);
+      --border-subtle: #e2e8f0;
+      --border-accent: #2563eb;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      
+      --terminal-bg: #1e293b;
+      --terminal-header: #0f172a;
+      --terminal-border: #334155;
+      
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      --glow-blue: 0 0 15px rgba(37, 99, 235, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Navigation */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-surface-glass);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: border-color 0.25s ease;
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.35);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-blue);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-icon {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-icon:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-pulse {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background-color: var(--accent-emerald);
+      box-shadow: 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.4rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-blue), #2563eb);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      transform: translateY(-1px);
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 4.5rem 0 3.5rem;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-mono);
+      color: var(--accent-cyan);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #60a5fa, #38bdf8, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 580px;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-value {
+      font-size: 1.65rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--accent-blue);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    /* Terminal Window Component */
+    .terminal-card {
+      background: var(--terminal-bg);
+      border: 1px solid var(--terminal-border);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+    }
+
+    .terminal-header {
+      background: var(--terminal-header);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--terminal-border);
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 0.45rem;
+    }
+
+    .terminal-dot {
+      width: 0.7rem;
+      height: 0.7rem;
+      border-radius: 50%;
+    }
+
+    .dot-red { background-color: #ef4444; }
+    .dot-yellow { background-color: #f59e0b; }
+    .dot-green { background-color: #10b981; }
+
+    .terminal-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .terminal-body {
+      padding: 1.25rem;
+      height: 380px;
+      overflow-y: auto;
+      color: #e5e7eb;
+      background: #0d1117;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .terminal-output {
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .terminal-line {
+      margin-bottom: 0.35rem;
+    }
+
+    .terminal-prompt {
+      color: var(--accent-emerald);
+      font-weight: bold;
+    }
+
+    .terminal-cmd {
+      color: #38bdf8;
+    }
+
+    .terminal-input-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: auto;
+      padding-top: 0.5rem;
+    }
+
+    .terminal-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      flex-grow: 1;
+      caret-color: var(--accent-cyan);
+    }
+
+    .terminal-chips {
+      padding: 0.6rem 1rem;
+      background: var(--terminal-header);
+      border-top: 1px solid var(--terminal-border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .terminal-chips-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .chip-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #93c5fd;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.35rem;
+      font-size: 0.72rem;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      transition: all 0.15s ease;
+    }
+
+    .chip-btn:hover {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: var(--accent-blue);
+      color: #ffffff;
+    }
+
+    /* Section Styles */
+    .section {
+      padding: 5rem 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .section-header {
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: 2.15rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Filter Controls */
+    .filters-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .filter-tab {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 0.5rem 1.15rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-tab:hover, .filter-tab.active {
+      background: var(--accent-blue);
+      color: #ffffff;
+      border-color: var(--accent-blue);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .project-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      box-shadow: var(--card-shadow);
+      position: relative;
+    }
+
+    .project-card:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-4px);
+      box-shadow: var(--card-shadow), var(--glow-blue);
+    }
+
+    .project-top {
+      margin-bottom: 1.25rem;
+    }
+
+    .project-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .project-badge {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 0.35rem;
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--accent-blue);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .badge-go {
+      background: rgba(6, 182, 212, 0.12);
+      color: var(--accent-cyan);
+      border-color: rgba(6, 182, 212, 0.25);
+    }
+
+    .badge-infra {
+      background: rgba(139, 92, 246, 0.12);
+      color: var(--accent-purple);
+      border-color: rgba(139, 92, 246, 0.25);
+    }
+
+    .project-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .project-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 1.25rem;
+    }
+
+    .project-impact {
+      background: var(--bg-surface-elevated);
+      border-left: 3px solid var(--accent-emerald);
+      padding: 0.6rem 0.85rem;
+      border-radius: 0 0.35rem 0.35rem 0;
+      font-size: 0.82rem;
+      color: var(--text-main);
+      margin-bottom: 1.25rem;
+      font-weight: 500;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tech-pill {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .project-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 1.25rem;
+    }
+
+    /* Code Inspector Section */
+    .code-inspector {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .code-nav {
+      background: var(--bg-surface-elevated);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+
+    .code-tabs {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .code-tab {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      padding: 0.85rem 1.2rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.15s ease;
+    }
+
+    .code-tab.active {
+      color: var(--accent-blue);
+      border-bottom-color: var(--accent-blue);
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .code-tab:hover:not(.active) {
+      color: var(--text-main);
+    }
+
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .code-display {
+      background: #0d1117;
+      padding: 1.5rem;
+      overflow-x: auto;
+      color: #e5e7eb;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      max-height: 480px;
+    }
+
+    .code-display pre {
+      margin: 0;
+    }
+
+    /* Interactive IT Admin Tool (Subnet & Password) */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .tool-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tool-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--accent-blue);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tool-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+    }
+
+    .results-table td {
+      padding: 0.5rem 0.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .results-table td:first-child {
+      color: var(--text-muted);
+      font-weight: 600;
+      width: 45%;
+    }
+
+    .results-table td:last-child {
+      color: var(--accent-cyan);
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .skill-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .skill-cat-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .skill-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .skill-item-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .skill-bar-bg {
+      height: 6px;
+      background: var(--bg-surface-elevated);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+      border-radius: 9999px;
+    }
+
+    /* Certifications Section */
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .cert-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 0.75rem;
+      padding: 1.75rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .cert-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-blue);
+    }
+
+    .cert-badge-icon {
+      width: 3.5rem;
+      height: 3.5rem;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(6, 182, 212, 0.15));
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-blue);
+      flex-shrink: 0;
+    }
+
+    .cert-info h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .cert-issuer {
+      font-size: 0.82rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      font-family: var(--font-mono);
+    }
+
+    .cert-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Contact Section */
+    .contact-wrapper {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+    }
+
+    .contact-info-pane {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #ffffff;
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .contact-info-pane h3 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    .contact-info-pane p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .contact-methods {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .contact-method-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.92rem;
+    }
+
+    .contact-icon-bubble {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #38bdf8;
+    }
+
+    .contact-form-pane {
+      padding: 3rem 2.5rem;
+    }
+
+    .form-textarea {
+      width: 100%;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      resize: vertical;
+      min-height: 110px;
+    }
+
+    .form-textarea:focus {
+      border-color: var(--accent-blue);
+    }
+
+    /* Footer */
+    .footer {
+      padding: 3rem 0;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .footer-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent-emerald);
+      color: #ffffff;
+      padding: 0.85rem 1.25rem;
+      border-radius: 0.5rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 999;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero-title {
+        font-size: 2.15rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#hero" class="brand">
+        <div class="brand-logo">JH</div>
+        <div class="brand-text">
+          <span class="brand-name">Joshua Hulka</span>
+          <span class="brand-title">Cloud & Systems Automation</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#terminal" class="nav-link">Terminal</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#code" class="nav-link">Code Inspector</a></li>
+        <li><a href="#tools" class="nav-link">Live Utilities</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#certifications" class="nav-link">Certifications</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <div class="badge-status">
+          <span class="badge-pulse"></span>
+          <span>Open to Roles</span>
+        </div>
+        <button id="themeToggle" class="btn-icon" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-tagline">// ENTERPRISE IT AUTOMATION & SYSTEMS ARCHITECTURE</div>
+          <h1 class="hero-title">
+            Engineering robust <span class="text-gradient">PowerShell, Go & Azure</span> solutions.
+          </h1>
+          <p class="hero-description">
+            I am a Microsoft-certified IT Systems & Automation Specialist with 4+ years of enterprise experience. 
+            I build custom REST API orchestration tools, high-speed Go diagnostics, and secure cloud infrastructure that eliminate repetitive tickets and streamline operations.
+          </p>
+          <div class="hero-cta">
+            <a href="#terminal" class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+              Launch Interactive Shell
+            </a>
+            <a href="#projects" class="btn btn-secondary">Explore Projects</a>
+            <a href="#code" class="btn btn-secondary">Inspect Source Code</a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-value">70%+</span>
+              <span class="stat-label">Onboarding Time Saved</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">30+</span>
+              <span class="stat-label">Tenants Automated</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">2x</span>
+              <span class="stat-label">MS Certified (AZ-900 / MS-900)</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">99.8%</span>
+              <span class="stat-label">SLA Compliance Maintained</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal Card in Hero -->
+        <div class="hero-terminal" id="terminal">
+          <div class="terminal-card">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+              </div>
+              <span class="terminal-title">jh-shell ~ v2.4 (powershell/go env)</span>
+              <span style="font-size: 0.7rem; color: var(--accent-cyan);">STUART, FL [EST]</span>
+            </div>
+            <div class="terminal-body" id="termOutput">
+              <div class="terminal-line"><span style="color: var(--accent-cyan);">Joshua Hulka Systems Console [Interactive Session]</span></div>
+              <div class="terminal-line" style="color: var(--text-dim);">Type <span style="color: #facc15;">help</span> or click command chips below to run live tools.</div>
+              <div class="terminal-line" style="margin-top: 0.5rem;"><span class="terminal-prompt">jh-admin@cloud:~$</span> <span class="terminal-cmd">whoami --verbose</span></div>
+              <div class="terminal-output" style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.5rem;">
+                Joshua W. Hulka | L2 Service Desk Analyst & Cloud Automation Specialist<br>
+                Location: Stuart, Florida | Certs: AZ-900, MS-900 | Target: AZ-104<br>
+                Primary Stack: PowerShell, Go, Microsoft Graph API, Azure Entra ID, Linux
+              </div>
+            </div>
+            <div class="terminal-chips">
+              <span class="terminal-chips-label">Quick Run:</span>
+              <button class="chip-btn" onclick="executeCommand('skills')">skills</button>
+              <button class="chip-btn" onclick="executeCommand('diag -run')">diag -run</button>
+              <button class="chip-btn" onclick="executeCommand('graph-test')">graph-test</button>
+              <button class="chip-btn" onclick="executeCommand('projects')">projects</button>
+              <button class="chip-btn" onclick="executeCommand('certs')">certs</button>
+              <button class="chip-btn" onclick="executeCommand('clear')">clear</button>
+            </div>
+            <div style="padding: 0 1rem 0.75rem; background: var(--terminal-header);">
+              <div class="terminal-input-row">
+                <span class="terminal-prompt">jh-admin@cloud:~$</span>
+                <input type="text" id="termInput" class="terminal-input" placeholder="type help, diag -run, skills..." autocomplete="off">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects Section -->
+  <section id="projects" class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">// Production Engineering</div>
+        <h2 class="section-title">Featured Coding Projects</h2>
+        <p class="section-subtitle">
+          Real-world automation frameworks, compiled system utilities, and cloud infrastructure engineered for scalability and zero operational drag.
+        </p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <button class="filter-tab active" data-filter="all">All Projects</button>
+        <button class="filter-tab" data-filter="powershell">PowerShell & Automation</button>
+        <button class="filter-tab" data-filter="go">Go & Systems</button>
+        <button class="filter-tab" data-filter="cloud">Cloud & Infrastructure</button>
+        <button class="filter-tab" data-filter="web">Web & Frontend</button>
+      </div>
+
+      <div class="projects-grid" id="projectsContainer">
+        
+        <!-- Project 1 -->
+        <div class="project-card" data-category="powershell">
+          <div class="project-top">
+            <div class="project-badge-row">
+              <span class="project-badge">PowerShell & WPF</span>
+              <span style="font-size: 0.72rem; color: var(--text-dim); font-family: var(--font-mono);">Production</span>
+            </div>
+            <h3 class="project-title">M365 Graph API Automation Suite</h3>
+            <p class="project-desc">
+              Engineered a graphical automation tool with PowerShell and XAML that integrates directly with the Microsoft Graph REST API and Exchange Online PowerShell. Automates end-to-end user provisioning, dynamic group licensing, and Exchange alias routing across 30+ enterprise client tenants.
+            </p>
+            <div class="project-impact">
+              ⚡ <strong>Impact:</strong> Reduced user onboarding duration by over 70% and eliminated manual licensing and group configuration discrepancies.
+            </div>
+            <div class="project-tech">
+              <span class="tech-pill">PowerShell 7</span>
+              <span class="tech-pill">MS Graph SDK</span>
+              <span class="tech-pill">WPF / XAML</span>
+              <span class="tech-pill">JSON Schema</span>
+              <span class="tech-pill">OAuth 2.0</span>
+            </div>
+          </div>
+          <div class="project-actions">
+            <button class="btn btn-sm btn-primary" onclick="openCodeTab('powershell')">View Script</button>
+            <button class="btn btn-sm btn-secondary" onclick="executeCommand('graph-test')">Run Demo in Shell</button>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card" data-category="go">
+          <div class="project-top">
+            <div class="project-badge-row">
+              <span class="project-badge badge-go">Go (Golang)</span>
+              <span style="font-size: 0.72rem; color: var(--text-dim); font-family: var(--font-mono);">CLI Tool</span>
+            </div>
+            <h3 class="project-title">Go-NetDiag: Enterprise Network Diagnostic Utility</h3>
+            <p class="project-desc">
+              A high-performance, concurrent network diagnostic binary compiled for Windows and macOS. Gathers simultaneous TCP/UDP connection state, benchmarks DNS resolution times across multiple recursive resolvers, probes path MTU, and detects MVNO egress carrier IP mismatches.
+            </p>
+            <div class="project-impact">
+              ⚡ <strong>Impact:</strong> Cut remote VPN and SaaS access triage from 25 minutes down to an automated 12-second diagnostic report for analysts.
+            </div>
+            <div class="project-tech">
+              <span class="tech-pill">Go 1.22</span>
+              <span class="tech-pill">Goroutines & Channels</span>
+              <span class="tech-pill">DNS Prober</span>
+              <span class="tech-pill">Cross-Platform Compile</span>
+            </div>
+          </div>
+          <div class="project-actions">
+            <button class="btn btn-sm btn-primary" onclick="openCodeTab('go')">View Source</button>
+            <button class="btn btn-sm btn-secondary" onclick="executeCommand('diag -run')">Execute Diag</button>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card" data-category="cloud">
+          <div class="project-top">
+            <div class="project-badge-row">
+              <span class="project-badge badge-infra">Cloud & Security</span>
+              <span style="font-size: 0.72rem; color: var(--text-dim); font-family: var(--font-mono);">Infrastructure</span>
+            </div>
+            <h3 class="project-title">Hardened WireGuard & Pi-hole Cloud Gateway</h3>
+            <p class="project-desc">
+              Architected and deployed a private VPN gateway on a cloud Linux VPS in Stockholm, Sweden. Automated the provisioning of WireGuard kernel tunnels, iptables routing, and Pi-hole DNS sinkholing to provide remote encryption, privacy, and network-level telemetry filtration.
+            </p>
+            <div class="project-impact">
+              ⚡ <strong>Impact:</strong> Zero-leak encrypted remote egress with automated ad/telemetry blocking across mobile and workstation endpoints.
+            </div>
+            <div class="project-tech">
+              <span class="tech-pill">Linux (Ubuntu)</span>
+              <span class="tech-pill">WireGuard VPN</span>
+              <span class="tech-pill">Pi-hole DNS</span>
+              <span class="tech-pill">Iptables / UFW</span>
+              <span class="tech-pill">Bash Automation</span>
+            </div>
+          </div>
+          <div class="project-actions">
+            <button class="btn btn-sm btn-primary" onclick="openCodeTab('infra')">View Config Script</button>
+            <button class="btn btn-sm btn-secondary" onclick="executeCommand('whoami')">Read Architecture</button>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="project-card" data-category="powershell">
+          <div class="project-top">
+            <div class="project-badge-row">
+              <span class="project-badge">PowerShell & Azure</span>
+              <span style="font-size: 0.72rem; color: var(--text-dim); font-family: var(--font-mono);">Entra ID</span>
+            </div>
+            <h3 class="project-title">Entra ID Conditional Access Analyzer</h3>
+            <p class="project-desc">
+              Automated auditing tool for Entra ID sign-in logs and Conditional Access compliance. Automatically correlates failed sign-in telemetry, geofence violations, and unmanaged device postures, generating actionable alerts and exemption recommendations for Tier 2 escalation engineers.
+            </p>
+            <div class="project-impact">
+              ⚡ <strong>Impact:</strong> Rapidly pinpointed international MVNO IP egress discrepancies blocking remote executives and field technicians.
+            </div>
+            <div class="project-tech">
+              <span class="tech-pill">PowerShell</span>
+              <span class="tech-pill">Entra ID</span>
+              <span class="tech-pill">Azure Log Analytics</span>
+              <span class="tech-pill">KQL Queries</span>
+            </div>
+          </div>
+          <div class="project-actions">
+            <button class="btn btn-sm btn-secondary" onclick="executeCommand('projects')">Inspect Telemetry</button>
+          </div>
+        </div>
+
+        <!-- Project 5 -->
+        <div class="project-card" data-category="web">
+          <div class="project-top">
+            <div class="project-badge-row">
+              <span class="project-badge" style="background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.25);">Web & CI/CD</span>
+              <span style="font-size: 0.72rem; color: var(--text-dim); font-family: var(--font-mono);">Deployed</span>
+            </div>
+            <h3 class="project-title">Trapped in the Apocalypse & Studio Web Platform</h3>
+            <p class="project-desc">
+              Responsive web platforms designed with modular CSS architecture, Tailwind CSS, and GitHub Actions CI/CD. Features mobile-first layouts, integrated audio and video media playback, and automated linting and deployment to GitHub Pages.
+            </p>
+            <div class="project-impact">
+              ⚡ <strong>Impact:</strong> 100/100 Lighthouse performance scores, instant global CDN caching, and automated testing on every commit.
+            </div>
+            <div class="project-tech">
+              <span class="tech-pill">HTML5 / CSS3</span>
+              <span class="tech-pill">Tailwind CSS</span>
+              <span class="tech-pill">JavaScript</span>
+              <span class="tech-pill">GitHub CI/CD</span>
+              <span class="tech-pill">DNS & CDN</span>
+            </div>
+          </div>
+          <div class="project-actions">
+            <a href="#hero" class="btn btn-sm btn-secondary">Platform Live</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Code Inspector -->
+  <section id="code" class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">// Source Code Deep-Dive</div>
+        <h2 class="section-title">Interactive Code Inspector</h2>
+        <p class="section-subtitle">
+          Examine actual scripts and code written by Joshua Hulka for enterprise automation, systems programming, and infrastructure management.
+        </p>
+      </div>
+
+      <div class="code-inspector">
+        <div class="code-nav">
+          <div class="code-tabs">
+            <button class="code-tab active" id="tab-powershell" onclick="switchTab('powershell')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+              New-M365UserProvisioning.ps1
+            </button>
+            <button class="code-tab" id="tab-go" onclick="switchTab('go')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              netdiag.go
+            </button>
+            <button class="code-tab" id="tab-infra" onclick="switchTab('infra')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+              deploy-wireguard.sh
+            </button>
+          </div>
+          <div class="code-toolbar">
+            <button class="btn btn-sm btn-secondary" onclick="copyActiveCode()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy Code
+            </button>
+          </div>
+        </div>
+
+        <div class="code-display">
+          <pre id="codeSnippet"><code class="language-powershell"># Loading snippet...</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live IT Admin Utilities Section (Demonstrating Frontend JS + Systems Knowledge) -->
+  <section id="tools" class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">// Live Interactive Utilities</div>
+        <h2 class="section-title">Browser-Based IT Tools</h2>
+        <p class="section-subtitle">
+          Test drive these functional network diagnostic and security utilities running directly in your browser.
+        </p>
+      </div>
+
+      <div class="tools-grid">
+        <!-- Subnet Calculator -->
+        <div class="tool-box">
+          <div class="tool-header">
+            <div class="tool-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+            </div>
+            <div>
+              <h3 class="tool-title">IPv4 CIDR Subnet Calculator</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Instant subnet mask, broadcast, and host calculations</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cidrInput">Network CIDR Prefix (e.g. 192.168.1.0/24 or 10.0.0.0/22):</label>
+            <input type="text" id="cidrInput" class="form-input" value="192.168.1.0/24" oninput="calculateSubnet()">
+          </div>
+
+          <table class="results-table">
+            <tr><td>Netmask:</td><td id="resNetmask">255.255.255.0</td></tr>
+            <tr><td>Network Address:</td><td id="resNetAddr">192.168.1.0</td></tr>
+            <tr><td>Broadcast Address:</td><td id="resBcast">192.168.1.255</td></tr>
+            <tr><td>Usable Host Range:</td><td id="resRange">192.168.1.1 - 192.168.1.254</td></tr>
+            <tr><td>Total Usable Hosts:</td><td id="resHosts">254</td></tr>
+          </table>
+        </div>
+
+        <!-- Strong Password Generator -->
+        <div class="tool-box">
+          <div class="tool-header">
+            <div class="tool-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <div>
+              <h3 class="tool-title">Admin Credential Generator</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Generates high-entropy passphrases for service accounts</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pwdLength">Password Length: <span id="pwdLenVal">20</span> characters</label>
+            <input type="range" id="pwdLength" min="12" max="36" value="20" style="width: 100%; accent-color: var(--accent-blue);" oninput="document.getElementById('pwdLenVal').innerText = this.value; generatePass();">
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; margin-bottom: 1.25rem;">
+            <input type="text" id="pwdOutput" class="form-input" readonly>
+            <button class="btn btn-primary" onclick="copyPassword()">Copy</button>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Calculated Entropy: <strong id="entropyVal" style="color: var(--accent-emerald);">118 bits (Very Strong)</strong></span>
+            <button class="btn btn-sm btn-secondary" onclick="generatePass()">Regenerate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Skills Matrix -->
+  <section id="skills" class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">// Core Competencies</div>
+        <h2 class="section-title">Technical Skills & Ecosystem</h2>
+        <p class="section-subtitle">
+          Synthesizing modern systems scripting, cloud administration, network protocols, and frontend user interfaces.
+        </p>
+      </div>
+
+      <div class="skills-grid">
+        <!-- Automation & Scripting -->
+        <div class="skill-card">
+          <div class="skill-header">
+            <span style="font-size: 1.4rem;">⚡</span>
+            <h3 class="skill-cat-title">Automation & Code</h3>
+          </div>
+          <ul class="skill-list">
+            <li>
+              <div class="skill-item-row"><span>PowerShell (v5.1 & v7 Core)</span><span>95%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 95%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Microsoft Graph SDK / REST APIs</span><span>90%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 90%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Go (Golang) Systems Tools</span><span>82%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 82%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Bash / Linux Shell Scripting</span><span>85%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 85%;"></div></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Cloud & Systems -->
+        <div class="skill-card">
+          <div class="skill-header">
+            <span style="font-size: 1.4rem;">☁️</span>
+            <h3 class="skill-cat-title">Cloud & Systems</h3>
+          </div>
+          <ul class="skill-list">
+            <li>
+              <div class="skill-item-row"><span>Microsoft Azure / Entra ID</span><span>92%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 92%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Microsoft Intune & Endpoint Mgr</span><span>88%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 88%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Conditional Access & MFA Policy</span><span>90%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 90%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Active Directory & GPO</span><span>88%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 88%;"></div></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Networking & Security -->
+        <div class="skill-card">
+          <div class="skill-header">
+            <span style="font-size: 1.4rem;">🛡️</span>
+            <h3 class="skill-cat-title">Networking & Security</h3>
+          </div>
+          <ul class="skill-list">
+            <li>
+              <div class="skill-item-row"><span>WireGuard VPN & Tunneling</span><span>88%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 88%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>DNS Sinkholes (Pi-hole / Unbound)</span><span>85%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 85%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Cisco AnyConnect, FortiClient, Zscaler</span><span>90%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 90%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Network Diagnostic Telemetry</span><span>92%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 92%;"></div></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Web & Dev Practices -->
+        <div class="skill-card">
+          <div class="skill-header">
+            <span style="font-size: 1.4rem;">💻</span>
+            <h3 class="skill-cat-title">Web & DevOps</h3>
+          </div>
+          <ul class="skill-list">
+            <li>
+              <div class="skill-item-row"><span>HTML5, CSS3, Modern Layouts</span><span>92%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 92%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Tailwind CSS & Mobile-First UI</span><span>88%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 88%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Git Version Control & GitHub Actions</span><span>85%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 85%;"></div></div>
+            </li>
+            <li>
+              <div class="skill-item-row"><span>Power BI & JSON Data Schemas</span><span>84%</span></div>
+              <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 84%;"></div></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Certifications & Credentials -->
+  <section id="certifications" class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">// Verified Credentials</div>
+        <h2 class="section-title">Certifications & Education</h2>
+        <p class="section-subtitle">
+          Validated proficiency recognized by Microsoft and accredited academic institutions.
+        </p>
+      </div>
+
+      <div class="certs-grid">
+        <!-- AZ-900 -->
+        <div class="cert-card">
+          <div class="cert-badge-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+          </div>
+          <div class="cert-info">
+            <h4>Microsoft Certified: Azure Fundamentals</h4>
+            <div class="cert-issuer">Microsoft | AZ-900</div>
+            <div class="cert-meta">
+              <strong>Credential ID:</strong> 55481FBEB84A0C46<br>
+              <strong>Status:</strong> Active & Verified<br>
+              Focus: Azure cloud architecture, core compute, storage resiliency (GZR), and Entra ID governance.
+            </div>
+          </div>
+        </div>
+
+        <!-- MS-900 -->
+        <div class="cert-card">
+          <div class="cert-badge-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          </div>
+          <div class="cert-info">
+            <h4>Microsoft 365 Certified: Fundamentals</h4>
+            <div class="cert-issuer">Microsoft | MS-900</div>
+            <div class="cert-meta">
+              <strong>Credential ID:</strong> 782DDF0641F45E96<br>
+              <strong>Status:</strong> Active & Verified<br>
+              Focus: M365 tenant lifecycle, Endpoint Management (Intune), compliance baselines, and security.
+            </div>
+          </div>
+        </div>
+
+        <!-- AZ-104 In Progress -->
+        <div class="cert-card">
+          <div class="cert-badge-icon" style="background: rgba(245, 158, 11, 0.12); color: var(--accent-amber); border-color: rgba(245, 158, 11, 0.3);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <div class="cert-info">
+            <h4>Microsoft Certified: Azure Administrator</h4>
+            <div class="cert-issuer">Microsoft | AZ-104 (In Progress)</div>
+            <div class="cert-meta">
+              <strong>Status:</strong> Active Advanced Coursework<br>
+              Focus: Managing Azure identities and governance, implementing virtual networks, and configuring storage and VMs.
+            </div>
+          </div>
+        </div>
+
+        <!-- IRSC Degree -->
+        <div class="cert-card">
+          <div class="cert-badge-icon" style="background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.3);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+          </div>
+          <div class="cert-info">
+            <h4>Associate of Arts in Information Technology</h4>
+            <div class="cert-issuer">Indian River State College (IRSC)</div>
+            <div class="cert-meta">
+              <strong>Honors:</strong> Summa Cum Laude<br>
+              Location: Fort Pierce, Florida<br>
+              Foundational coursework in computer systems, relational databases, software architecture, and network topology.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Connect -->
+  <section id="contact" class="section">
+    <div class="container">
+      <div class="contact-wrapper">
+        <div class="contact-info-pane">
+          <div>
+            <h3>Let's Connect</h3>
+            <p>
+              I am open to Cloud Systems, Automation, Level 2/3 Service Desk, and Systems Administration opportunities. Whether discussing architecture or troubleshooting complex cloud environments, feel free to reach out.
+            </p>
+            <ul class="contact-methods">
+              <li class="contact-method-item">
+                <div class="contact-icon-bubble">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                </div>
+                <div>
+                  <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Direct Email</div>
+                  <a href="mailto:hulka.joshua@gmail.com" style="color: #ffffff; text-decoration: none; font-weight: 600;">hulka.joshua@gmail.com</a>
+                </div>
+              </li>
+              <li class="contact-method-item">
+                <div class="contact-icon-bubble">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </div>
+                <div>
+                  <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">LinkedIn Profile</div>
+                  <a href="https://www.linkedin.com/in/joshuahulka" target="_blank" rel="noopener" style="color: #ffffff; text-decoration: none; font-weight: 600;">linkedin.com/in/joshuahulka</a>
+                </div>
+              </li>
+              <li class="contact-method-item">
+                <div class="contact-icon-bubble">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                </div>
+                <div>
+                  <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Location</div>
+                  <span style="color: #ffffff; font-weight: 600;">Stuart, Florida (Remote / Hybrid)</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div style="font-size: 0.8rem; color: #64748b; margin-top: 2rem;">
+            Response Time: Typically within 2-4 hours.
+          </div>
+        </div>
+
+        <div class="contact-form-pane">
+          <form id="contactForm" onsubmit="handleContactSubmit(event)">
+            <div class="form-group">
+              <label class="form-label" for="contactName">Your Name</label>
+              <input type="text" id="contactName" class="form-input" placeholder="Alex Rivera" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactEmail">Work Email</label>
+              <input type="email" id="contactEmail" class="form-input" placeholder="alex@company.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactSubject">Subject / Role</label>
+              <input type="text" id="contactSubject" class="form-input" placeholder="Cloud Systems Opportunity / Project Discussion" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactMessage">Message</label>
+              <textarea id="contactMessage" class="form-textarea" placeholder="Hello Joshua, we reviewed your automation portfolio and would like to discuss..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div>
+        <strong>Joshua W. Hulka</strong> — Cloud & Systems Automation Portfolio
+      </div>
+      <div>
+        Designed & Coded with Semantic HTML5, Modular CSS & Pure Vanilla JS.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg">Action completed successfully.</span>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Theme Toggle
+    const themeToggleBtn = document.getElementById('themeToggle');
+    themeToggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      showToast('Switched to ' + newTheme + ' mode');
+    });
+
+    // Toast Function
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.innerText = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
+    // Interactive Terminal Shell
+    const termInput = document.getElementById('termInput');
+    const termOutput = document.getElementById('termOutput');
+    let cmdHistory = [];
+    let historyIdx = -1;
+
+    const commands = {
+      'help': `Available Commands:
+  - skills          : View language and system proficiencies
+  - diag -run       : Simulate running the compiled Go-NetDiag tool
+  - graph-test      : Simulate Microsoft Graph API user provisioning
+  - projects        : List all featured enterprise engineering projects
+  - certs           : Display verified Microsoft certifications
+  - contact         : Show direct email, LinkedIn, and location
+  - whoami          : Output user role and background overview
+  - clear           : Clear the terminal console`,
+
+      'skills': `Joshua Hulka - Technical Matrix:
+  [PowerShell]      ============================== 95% (Graph SDK, WinForms/WPF, JSON orchestration)
+  [Go (Golang)]     ========================       82% (High-speed concurrent networking CLI)
+  [Microsoft Azure] ============================   92% (Entra ID, Intune, Storage GZR, Monitor)
+  [Linux & Network] ============================   88% (WireGuard VPN, Pi-hole, UFW, TCP/IP)
+  [Web & Frontend]  ============================   90% (HTML5, Modern CSS, Tailwind, Responsive)`,
+
+      'diag -run': `[Go-NetDiag v1.2] Initiating diagnostic sweep on interface 'eth0'...
+  ✓ Host IPv4: 10.140.42.18 / Gateway: 10.140.0.1
+  ✓ TCP 3-Way Handshake to gateway: 1.2ms
+  ✓ Probing DNS Latency across resolvers:
+      - 1.1.1.1 (Cloudflare)   : 4.8ms [PASS]
+      - 8.8.8.8 (Google DNS)   : 6.1ms [PASS]
+      - Internal Tenant DNS    : 2.1ms [PASS]
+  ✓ Path MTU Discovery: 1500 bytes (No fragmentation)
+  ✓ Outbound Egress IP: 162.247.74.20 (US-East Region)
+  ✓ MVNO Carrier Geofence Verification: Compliant with Entra ID policy.
+  [RESULT] All health checks passed in 340ms with 0 dropped packets.`,
+
+      'graph-test': `[PowerShell M365 Orchestrator] Connecting to Microsoft Graph...
+  ✓ Authentication token acquired via Tenant App Registration.
+  ✓ Payload validated against enterprise schema (NewHire-Batch04.json).
+  ✓ Creating Entra ID User: 'j.smith@contoso-partner.com'... Object ID: 4a9f-882b-91c0
+  ✓ Assigning Microsoft 365 Business Premium License (SKU: cbdc1420-a938)... [SUCCESS]
+  ✓ Adding to Security Group 'Sec-Intune-Compliant-Baseline'... [SUCCESS]
+  ✓ Exchange Online Mailbox provisioned with aliases and default retention policy.
+  [SUMMARY] User provisioned and fully licensed in 4.2 seconds (vs 15 min manual).`,
+
+      'projects': `Featured Projects:
+  1. M365 Graph API Automation Suite (PowerShell & WPF)
+  2. Go-NetDiag: Enterprise Network Diagnostic Utility (Go)
+  3. Hardened WireGuard & Pi-hole Cloud Gateway (Linux/Infra)
+  4. Entra ID Conditional Access Analyzer (PowerShell & Azure)
+  5. Trapped in the Apocalypse & Studio Web Platform (Tailwind CSS/CI-CD)
+  (Use 'cat <project-name>' or browse the section below for full details)`,
+
+      'certs': `Verified Certifications:
+  - Microsoft Certified: Azure Fundamentals (AZ-900) - ID: 55481FBEB84A0C46
+  - Microsoft 365 Certified: Fundamentals (MS-900) - ID: 782DDF0641F45E96
+  - In Progress: Microsoft Certified: Azure Administrator Associate (AZ-104)
+  - Associate of Arts in Information Technology (Summa Cum Laude) - IRSC`,
+
+      'contact': `Direct Communication:
+  - Email   : hulka.joshua@gmail.com
+  - LinkedIn: https://www.linkedin.com/in/joshuahulka
+  - Phone   : (772) 812-9189
+  - Location: Stuart, Florida`,
+
+      'whoami': `Joshua W. Hulka | Service Desk Analyst Level 2 & Automation Specialist at DYOPATH.
+Specializing in cloud infrastructure, PowerShell scripting, Go tooling, and systems reliability.`
+    };
+
+    termInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const cmd = termInput.value.trim();
+        if (cmd) {
+          cmdHistory.push(cmd);
+          historyIdx = cmdHistory.length;
+          executeCommand(cmd);
+          termInput.value = '';
+        }
+      } else if (e.key === 'ArrowUp') {
+        if (cmdHistory.length > 0 && historyIdx > 0) {
+          historyIdx--;
+          termInput.value = cmdHistory[historyIdx];
+        }
+      } else if (e.key === 'ArrowDown') {
+        if (historyIdx < cmdHistory.length - 1) {
+          historyIdx++;
+          termInput.value = cmdHistory[historyIdx];
+        } else {
+          historyIdx = cmdHistory.length;
+          termInput.value = '';
+        }
+      }
+    });
+
+    function executeCommand(cmd) {
+      const lower = cmd.toLowerCase().trim();
+      
+      // Append user line
+      const userLine = document.createElement('div');
+      userLine.className = 'terminal-line';
+      userLine.innerHTML = `<span class="terminal-prompt">jh-admin@cloud:~$</span> <span class="terminal-cmd">${escapeHtml(cmd)}</span>`;
+      termOutput.appendChild(userLine);
+
+      if (lower === 'clear') {
+        termOutput.innerHTML = '';
+        return;
+      }
+
+      const outLine = document.createElement('div');
+      outLine.className = 'terminal-output';
+      outLine.style.color = '#94a3b8';
+      outLine.style.fontSize = '0.82rem';
+      outLine.style.marginBottom = '0.75rem';
+
+      if (commands[lower]) {
+        outLine.innerHTML = commands[lower].replace(/\n/g, '<br>').replace(/\s{2}/g, '&nbsp;&nbsp;');
+      } else {
+        outLine.innerHTML = `command not found: ${escapeHtml(cmd)}. Type <span style="color:#facc15;">help</span> to see available commands.`;
+      }
+
+      termOutput.appendChild(outLine);
+      termOutput.scrollTop = termOutput.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+      const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // Projects Filtering
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.getAttribute('data-filter');
+
+        projectCards.forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Code Inspector Tabs
+    const codeSnippets = {
+      powershell: `# ==============================================================================
+# Script: New-M365UserProvisioning.ps1
+# Author: Joshua Hulka (Service Desk Analyst L2 / Cloud Automation)
+# Description: Automated M365 tenant provisioning via Microsoft Graph API.
+# ==============================================================================
+
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory = $true)]
+    [string]$ConfigPath,
+
+    [Parameter(Mandatory = $false)]
+    [string]$TenantId
+)
+
+Import-Module Microsoft.Graph.Users -ErrorAction Stop
+Import-Module Microsoft.Graph.Groups -ErrorAction Stop
+
+function Invoke-TenantOnboarding {
+    [CmdletBinding()]
+    param([PSCustomObject]$UserSpec)
+
+    Write-Host "[INIT] Parsing provisioning payload for: $($UserSpec.UserPrincipalName)" -ForegroundColor Cyan
+
+    try {
+        # 1. Connect using Managed Identity or App Registration Certificate
+        $Scopes = @("User.ReadWrite.All", "Directory.ReadWrite.All")
+        # Connect-MgGraph -Scopes $Scopes -NoWelcome
+
+        # 2. Build User Object with standard Entra ID schema
+        $UserParams = @{
+            AccountEnabled    = $true
+            DisplayName       = "$($UserSpec.FirstName) $($UserSpec.LastName)"
+            GivenName         = $UserSpec.FirstName
+            Surname           = $UserSpec.LastName
+            UserPrincipalName = $UserSpec.UserPrincipalName
+            MailNickname      = $UserSpec.Alias
+            UsageLocation     = "US"
+            PasswordProfile   = @{
+                ForceChangePasswordNextSignIn = $true
+                Password                      = $UserSpec.TemporaryPassword
+            }
+            Department        = $UserSpec.Department
+            JobTitle          = $UserSpec.JobTitle
+        }
+
+        # 3. Invoke Microsoft Graph Endpoint
+        $NewUser = New-MgUser @UserParams
+        Write-Host "[SUCCESS] Created Entra ID Object ID: $($NewUser.Id)" -ForegroundColor Green
+
+        # 4. Assign M365 Business Premium SKU
+        $SkuId = $UserSpec.LicenseSkuId
+        Set-MgUserLicense -UserId $NewUser.Id -AddLicenses @(@{SkuId = $SkuId}) -RemoveLicenses @()
+        Write-Host "[LICENSED] Assigned SKU: $SkuId to $($NewUser.UserPrincipalName)" -ForegroundColor Green
+
+        # 5. Populate Dynamic Group Membership and MFA Baseline
+        Add-MgGroupMember -GroupId $UserSpec.TargetSecurityGroupId -DirectoryObjectId $NewUser.Id
+        Write-Host "[GROUP] Added to Baseline Security Group: $($UserSpec.TargetSecurityGroupId)" -ForegroundColor Cyan
+
+        return [PSCustomObject]@{
+            Status    = "Success"
+            UserId    = $NewUser.Id
+            UPN       = $NewUser.UserPrincipalName
+            Timestamp = (Get-Date).ToString("o")
+        }
+    }
+    catch {
+        Write-Error "[FAIL] Onboarding error for $($UserSpec.UserPrincipalName): $_"
+        return [PSCustomObject]@{
+            Status    = "Failed"
+            Error     = $_.Exception.Message
+            Timestamp = (Get-Date).ToString("o")
+        }
+    }
+}`,
+
+      go: `// ==============================================================================
+// Tool: netdiag.go - Enterprise Concurrent Network Diagnostics
+// Author: Joshua Hulka (Systems Automation Specialist)
+// Compile: go build -ldflags="-s -w" -o netdiag netdiag.go
+// ==============================================================================
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"net"
+	"os"
+	"sync"
+	"time"
+)
+
+type ProbeResult struct {
+	Target  string
+	Latency time.Duration
+	Err     error
+}
+
+func probeDNSResolver(ctx context.Context, resolver string, domain string) ProbeResult {
+	start := time.Now()
+	r := &net.Resolver{
+		PreferGo: true,
+		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+			d := net.Dialer{Timeout: 2 * time.Second}
+			return d.DialContext(ctx, "udp", resolver+":53")
+		},
+	}
+
+	_, err := r.LookupHost(ctx, domain)
+	return ProbeResult{
+		Target:  resolver,
+		Latency: time.Since(start),
+		Err:     err,
+	}
+}
+
+func main() {
+	fmt.Println("== Go-NetDiag v1.2: Cross-Platform Systems Telemetry ==")
+	resolvers := []string{
+		"1.1.1.1",        // Cloudflare
+		"8.8.8.8",        // Google
+		"9.9.9.9",        // Quad9
+		"208.67.222.222", // OpenDNS
+	}
+
+	testDomain := "login.microsoftonline.com"
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var wg sync.WaitGroup
+	results := make(chan ProbeResult, len(resolvers))
+
+	for _, res := range resolvers {
+		wg.Add(1)
+		go func(r string) {
+			defer wg.Done()
+			results <- probeDNSResolver(ctx, r, testDomain)
+		}(res)
+	}
+
+	wg.Wait()
+	close(results)
+
+	fmt.Printf("[+] Probing DNS resolution for target: %s\n", testDomain)
+	for res := range results {
+		if res.Err != nil {
+			fmt.Printf("  [-] %-15s : ERROR (%v)\n", res.Target, res.Err)
+		} else {
+			fmt.Printf("  [✓] %-15s : %-8v [HEALTHY]\n", res.Target, res.Latency)
+		}
+	}
+}`,
+
+      infra: `#!/usr/bin/env bash
+# ==============================================================================
+# Script: deploy-wireguard.sh
+# Author: Joshua Hulka
+# Target: Hardened Vultr Cloud VPS (Stockholm Node)
+# Purpose: Provision WireGuard encrypted kernel VPN tunnel + Pi-hole DNS sinkhole
+# ==============================================================================
+set -euo pipefail
+
+echo "[+] Hardening server kernel parameters..."
+sysctl -w net.ipv4.ip_forward=1
+sysctl -w net.ipv6.conf.all.forwarding=1
+
+echo "[+] Generating cryptographic keypairs..."
+umask 077
+SERVER_PRIV=$(wg genkey)
+SERVER_PUB=$(echo "$SERVER_PRIV" | wg pubkey)
+
+echo "[+] Writing WireGuard interface configuration..."
+# Interface configuration:
+# Address = 10.10.0.1/24
+# ListenPort = 51820
+# PrivateKey = $SERVER_PRIV
+# PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+# PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+systemctl enable --now wg-quick@wg0
+echo "[✓] WireGuard interface wg0 operational and listening on UDP port 51820."`
+    };
+
+    let activeTab = 'powershell';
+
+    function switchTab(tabKey) {
+      activeTab = tabKey;
+      document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+      const activeEl = document.getElementById('tab-' + tabKey);
+      if (activeEl) activeEl.classList.add('active');
+
+      const snippetEl = document.getElementById('codeSnippet');
+      snippetEl.innerText = codeSnippets[tabKey];
+    }
+
+    function openCodeTab(tabKey) {
+      switchTab(tabKey);
+      document.getElementById('code').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyActiveCode() {
+      const code = codeSnippets[activeTab];
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('Code copied to clipboard!');
+      });
+    }
+
+    // Subnet Calculator Logic
+    function calculateSubnet() {
+      const val = document.getElementById('cidrInput').value.trim();
+      const parts = val.split('/');
+      if (parts.length !== 2) return;
+
+      const ipStr = parts[0].trim();
+      const prefix = parseInt(parts[1], 10);
+
+      if (isNaN(prefix) || prefix < 0 || prefix > 32) return;
+
+      const ipParts = ipStr.split('.').map(Number);
+      if (ipParts.length !== 4 || ipParts.some(p => isNaN(p) || p < 0 || p > 255)) return;
+
+      // 32-bit integer conversion
+      const ipNum = (ipParts[0] << 24) | (ipParts[1] << 16) | (ipParts[2] << 8) | ipParts[3];
+      const maskNum = prefix === 0 ? 0 : (~0 << (32 - prefix)) >>> 0;
+      const netNum = (ipNum & maskNum) >>> 0;
+      const bcastNum = (netNum | (~maskNum >>> 0)) >>> 0;
+
+      function numToIp(n) {
+        return [(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join('.');
+      }
+
+      document.getElementById('resNetmask').innerText = numToIp(maskNum);
+      document.getElementById('resNetAddr').innerText = numToIp(netNum);
+      document.getElementById('resBcast').innerText = numToIp(bcastNum);
+
+      const usableHosts = prefix >= 31 ? 0 : Math.max(0, Math.pow(2, 32 - prefix) - 2);
+      document.getElementById('resHosts').innerText = usableHosts.toLocaleString();
+
+      if (prefix >= 31) {
+        document.getElementById('resRange').innerText = 'Point-to-point / Host only';
+      } else {
+        const firstUsable = numToIp(netNum + 1);
+        const lastUsable = numToIp(bcastNum - 1);
+        document.getElementById('resRange').innerText = firstUsable + ' - ' + lastUsable;
+      }
+    }
+
+    // Strong Password Generator Logic
+    function generatePass() {
+      const len = parseInt(document.getElementById('pwdLength').value, 10);
+      const chars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%^&*()_+~=";
+      let pwd = "";
+      const array = new Uint32Array(len);
+      window.crypto.getRandomValues(array);
+      for (let i = 0; i < len; i++) {
+        pwd += chars[array[i] % chars.length];
+      }
+      document.getElementById('pwdOutput').value = pwd;
+      
+      const entropy = Math.round(len * Math.log2(chars.length));
+      document.getElementById('entropyVal').innerText = entropy + ' bits (Very Strong)';
+    }
+
+    function copyPassword() {
+      const p = document.getElementById('pwdOutput').value;
+      if (p) {
+        navigator.clipboard.writeText(p).then(() => {
+          showToast('Credential copied to clipboard!');
+        });
+      }
+    }
+
+    // Contact Form Handler
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('contactName').value;
+      showToast('Thank you, ' + name + '! Message simulated and recorded.');
+      document.getElementById('contactForm').reset();
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      switchTab('powershell');
+      calculateSubnet();
+      generatePass();
+    });
+  </script>
+</body>
+</html>
